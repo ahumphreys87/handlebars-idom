@@ -1,0 +1,13 @@
+<script src="node_modules/babel-core/browser.js"></script>
+<script src="node_modules/handlebars/dist/handlebars.js"></script>
+<script type="text/babel">
+var babel = window.babel;
+var Handlebars = window.Handlebars;
+
+var code = 'var test;'
+var markup = '<div><div>{{test}}</div></div>';
+
+console.log(babel.transform(code).ast);
+console.log(Handlebars.parse(markup));
+
+</script>
