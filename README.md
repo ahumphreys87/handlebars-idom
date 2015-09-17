@@ -5,7 +5,5 @@ WIP: Currently in R&D stages.  Eventually, this project will compile Handlebars 
 ## Debugging ASTs
 
 1. `npm install`
-2. `node index`
-3. Open http://127.0.0.1:3000
-4. Open console, inspect ASTs
-5. Edit index.html, refresh, inspect
+2. Open index.html, inspect ASTs
+3. Edit index.html, refresh, inspect

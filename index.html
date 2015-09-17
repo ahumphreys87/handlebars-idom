@@ -1,13 +1,40 @@
 <script src="node_modules/babel-core/browser.js"></script>
-<script src="node_modules/handlebars/dist/handlebars.js"></script>
-<script type="text/babel">
-var babel = window.babel;
-var Handlebars = window.Handlebars;
+<script src="node_modules/htmlbars/dist/assets/loader.js"></script>
+<script src="node_modules/htmlbars/dist/amd/htmlbars-syntax.amd.js"></script>
 
-var code = 'var test;'
-var markup = '<div><div>{{test}}</div></div>';
+<script>
+  var babel = window.babel;
+  var htmlbarsSyntax = window.requireModule('htmlbars-syntax');
 
-console.log(babel.transform(code).ast);
-console.log(Handlebars.parse(markup));
+  var sourceMarkup = '<div>{{foo}}</div>';
+  var targetCode = [
+    'function render(data) {',
+    '  elementOpen("div");',
+    '  text(data.foo);',
+    '  elementClose("div");',
+    '}'
+  ].join('');
 
+  var sourceMarkupClass = '<div class="{{bar}}">foo</div>';
+  var targetCodeClass = [
+    'function render(data) {',
+    '  elementOpenStart("div");',
+    '  attr(data.bar);',
+    '  elementOpenEnd("div");',
+    '  elementClose("div");',
+    '}'
+  ].join('');
+
+  console.log('Markup: ' + sourceMarkup);
+  console.log('HTMLBars source AST');
+  console.log(htmlbarsSyntax.parse(sourceMarkup));
+  console.log('Target Babel AST');
+  console.log(babel.transform(targetCode).ast);
+  
+  console.log('\n');
+  console.log('Markup: ' + sourceMarkupClass);
+  console.log('HTMLBars source AST');
+  console.log(htmlbarsSyntax.parse(sourceMarkupClass));
+  console.log('Target Babel AST');
+  console.log(babel.transform(targetCodeClass).ast);
 </script>

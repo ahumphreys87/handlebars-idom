@@ -6,14 +6,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Ian Stewart <ianmstew@gmail.com> (https://ianmstew.com)",
+  "author": "Ian Stewart <ianmstew@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel": "^5.8.23",
-    "handlebars": "^4.0.2"
+    "htmlbars": "^0.14.5"
   },
   "devDependencies": {
-    "babel-core": "^5.8.24",
-    "express": "^4.13.3"
+    "babel": "^5.8.23",
+    "babel-core": "^5.8.24"
   }
 }
