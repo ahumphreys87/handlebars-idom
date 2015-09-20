@@ -1,48 +1,258 @@
 <title>htmlbars-idom ASTs</title>
 
 <script src="node_modules/babel-core/browser.js"></script>
-<script src="node_modules/handlebars/dist/handlebars.js"></script>
 <script src="node_modules/htmlbars/dist/assets/loader.js"></script>
 <script src="node_modules/htmlbars/dist/amd/htmlbars-syntax.amd.js"></script>
 
 <script>
-  var babel = window.babel;
-  var handlebars = window.Handlebars;
-  var htmlbars = window.requireModule('htmlbars-syntax');
+  var depth = -1;
 
-  var sourceMarkup = '<div>{{foo}}</div>';
-  var targetCode = [
-    'function render(data) {',
-    '  elementOpen("div");',
-    '  text(data.foo);',
-    '  elementClose("div");',
-    '}'
-  ].join('');
+  function indent() {
+    var strbuf = [];
+    for (var i = 0; i < depth; i++) {
+      strbuf.push('  ');
+    }
+    return strbuf.join('');
+  }
 
-  var sourceMarkupClass = '<div class="{{bar}}">foo</div>';
-  var targetCodeClass = [
-    'function render(data) {',
-    '  elementOpenStart("div");',
-    '  attr("class", data.bar);',
-    '  elementOpenEnd("div");',
-    '  elementClose("div");',
-    '}'
-  ].join('');
+  function print(str) {
+    console.log(indent() + str);
+  }
 
-  console.log('Markup: ' + sourceMarkup);
-  console.log('Handlebars source AST:');
-  console.log(handlebars.parse(sourceMarkup));
+  function printValue(str, key) {
+    console.log(indent() + '|' + (key ? key + ':' : '') + str);
+  }
+
+  function walkProgram(program) {
+    for (var i = 0; i < program.body.length; i++) {
+      walkTree(program.body[i]);
+    }
+  }
+
+  function walkBlockStatement(blockStatement) {
+    walkTree(blockStatement.path);
+    walkTree(blockStatement.program);
+  }
+
+  function walkMustacheStatement(mustacheStatement) {
+    walkTree(mustacheStatement.path);
+    for (var i = 0; i < mustacheStatement.params.length; i++) {
+      walkTree(mustacheStatement.params[i]);
+    }
+  }
+
+  function walkConcatStatement(concatStatement) {
+    for (var i = 0; i < concatStatement.parts.length; i++) {
+      walkTree(concatStatement.parts[i]);
+    }
+  }
+
+  function walkElementNode(elementNode) {
+    printValue(elementNode.tag, 'tag');
+    for (var i = 0; i < elementNode.attributes.length; i++) {
+      walkTree(elementNode.attributes[i]);
+    }
+    for (var i2 = 0; i2 < elementNode.children.length; i2++) {
+      walkTree(elementNode.children[i2]);
+    }
+  }
+
+  function walkTextNode(textNode) {
+    printValue(textNode.chars, 'chars');
+  }
+
+  function walkAttrNode(attrNode) {
+    printValue(attrNode.name, 'name');
+    walkTree(attrNode.value);
+  }
+
+  function walkPathExpression(pathExpression) {
+    printValue(pathExpression.parts.join('.'), 'path');
+  }
+
+  function walkStringLiteral(stringLiteral) {
+    printValue(stringLiteral.value, 'value');
+  }
+
+  function walkTree(node) {
+    var walkFn;
+    switch (node.type) {
+      case 'Program':
+        walkFn = walkProgram; break;
+      case 'BlockStatement':
+        walkFn = walkBlockStatement; break;
+      case 'MustacheStatement':
+        walkFn = walkMustacheStatement; break;
+      case 'ConcatStatement':
+        walkFn = walkConcatStatement; break;
+      case 'ElementNode':
+        walkFn = walkElementNode; break;
+      case 'TextNode':
+        walkFn = walkTextNode; break;
+      case 'AttrNode':
+        walkFn = walkAttrNode; break;
+      case 'PathExpression':
+        walkFn = walkPathExpression; break;
+      case 'StringLiteral':
+        walkFn = walkStringLiteral; break;
+      default:
+        throw new Error('Unexpected Node type: ' + node.type);
+    }
+    depth++;
+    print(node.type);
+    walkFn(node);
+    depth--;
+  }
+
+  window.walkTree = walkTree;
+</script>
+
+<script>
+  // var babel = window.babel;
+  var HTMLBars = window.requireModule('htmlbars-syntax');
+  var walkTree = window.walkTree;
+
+  /*
+  var sourceMarkupHello = '<div>hello</div>';
+  var htmlbarsAstHello = HTMLBars.parse(sourceMarkupHello);
+  // var targetCodeHello = [
+  //   'function render(data) {',
+  //   '  elementOpen("div");',
+  //   '  text("hello");',
+  //   '  elementClose("div");',
+  //   '}'
+  // ].join('');
+  // var babelAstHello = babel.transform(targetCodeHello).ast;
+
+  console.log('Dynamic text');
+  console.log(sourceMarkupHello);
   console.log('HTMLBars source AST:');
-  console.log(htmlbars.parse(sourceMarkup));
-  console.log('Target Babel AST:');
-  console.log(babel.transform(targetCode).ast);
+  console.log(htmlbarsAstHello);
+  console.log(walkTree(htmlbarsAstHello));
+  // console.log('Target Babel AST:');
+  // console.log(babelAstHello);
+
+  var sourceMarkupText = '<div>{{foo}}</div>';
+  var htmlbarsAstText = HTMLBars.parse(sourceMarkupText);
+  // var targetCodeText = [
+  //   'function render(data) {',
+  //   '  elementOpen("div");',
+  //   '  text(data["foo"]);',
+  //   '  elementClose("div");',
+  //   '}'
+  // ].join('');
+  // var babelAstText = babel.transform(targetCodeText).ast;
+
+  console.log('Dynamic text');
+  console.log(sourceMarkupText);
+  console.log('HTMLBars source AST:');
+  console.log(htmlbarsAstText);
+  console.log(walkTree(htmlbarsAstText));
+  // console.log('Target Babel AST:');
+  // console.log(babelAstText);
   
+  var sourceMarkupClass = '<div class="{{bar}}">foo</div>';
+  var htmlbarsAstClass = HTMLBars.parse(sourceMarkupClass);
+  // var targetCodeClass = [
+  //   'function render(data) {',
+  //   '  elementOpenStart("div");',
+  //   '  attr("class", data["bar"]);',
+  //   '  elementOpenEnd("div");',
+  //   '  elementClose("div");',
+  //   '}'
+  // ].join('');
+  // var babelAstClass = babel.transform(targetCodeClass).ast;
+
   console.log('\n');
-  console.log('Markup: ' + sourceMarkupClass);
-  console.log('Handlebars source AST:');
-  console.log(handlebars.parse(sourceMarkupClass));
+  console.log('Dynamic attribute value');
+  console.log(sourceMarkupClass);
   console.log('HTMLBars source AST:');
-  console.log(htmlbars.parse(sourceMarkupClass));
-  console.log('Target Babel AST:');
-  console.log(babel.transform(targetCodeClass).ast);
+  console.log(htmlbarsAstClass);
+  console.log(walkTree(htmlbarsAstClass));
+  // console.log('Target Babel AST:');
+  // console.log(babelAstClass);
+
+  var sourceMarkupConditionalAttr = '<div class="{{if bar bar "not-bar"}}">foo</div>';
+  var htmlbarsAstConitionalAttr = HTMLBars.parse(sourceMarkupConditionalAttr);
+  // var targetCodeConditionalAttr = [
+  //   'function render(data) {',
+  //   '  elementOpenStart("div");',
+  //   '  attr("class", (data.bar ? data["bar"] : "not-bar"));',
+  //   '  elementOpenEnd("div");',
+  //   '  elementClose("div");',
+  //   '}'
+  // ].join('');
+  // var babelAstConditionalAttr = babel.transform(targetCodeConditionalAttr).ast;
+
+  console.log('\n');
+  console.log('Conditional attribute value');
+  console.log(sourceMarkupConditionalAttr);
+  console.log('HTMLBars source AST:');
+  console.log(htmlbarsAstConitionalAttr);
+  walkTree(htmlbarsAstConitionalAttr);
+  // console.log('Target Babel AST:');
+  // console.log(babelAstConditionalAttr);
+
+  var sourceMarkupArray = '{{#array}}<div>foo</div>{{/array}}';
+  var htmlbarsAstArray = HTMLBars.parse(sourceMarkupArray);
+  // var targetCodeArray = [
+  //   'function render(data) {',
+  //   '  function block(data) {',
+  //   '    if (data == null) { return; }',
+  //   '    elementOpen("div");',
+  //   '    text("foo");',
+  //   '    elementClose("div");',
+  //   '  }',
+  //   '  if (data.array instanceof Array) {',
+  //   '    for (var i = 0; i < data.array.length; i++) {',
+  //   '      block(data.array[i]);',
+  //   '    }',
+  //   '  } else {',
+  //   '    block(data["array"]);',
+  //   '  }',
+  //   '}'
+  // ].join('');
+  // var babelAstArray = babel.transform(targetCodeArray).ast;
+
+  console.log('\n');
+  console.log('Dynamic block');
+  console.log(sourceMarkupArray);
+  console.log('HTMLBars source AST:');
+  console.log(htmlbarsAstArray);
+  walkTree(htmlbarsAstArray);
+  // console.log('Target Babel AST:');
+  // console.log(babelAstArray);
+  */
+
+  var sourceMarkupAll = '{{#array}}<div class="{{if bar bar "not-bar"}}">{{foo}}</div>{{/array}}';
+  var htmlbarsAstAll = HTMLBars.parse(sourceMarkupAll);
+  // var targetCodeAll = [
+  //   'function render(data) {',
+  //   '  function block(data) {',
+  //   '    if (data == null) { return; }',
+  //   '    elementOpenStart("div");',
+  //   '    attr("class", data["bar"]);',
+  //   '    elementOpenEnd("div");',
+  //   '    text(data["foo"]);',
+  //   '    elementClose("div");',
+  //   '  }',
+  //   '  if (data.array instanceof Array) {',
+  //   '    for (var i = 0; i < data.array.length; i++) {',
+  //   '      block(data.array[i]);',
+  //   '    }',
+  //   '  } else {',
+  //   '    block(data["array"]);',
+  //   '  }',
+  //   '}'
+  // ].join('');
+  // var babelAstAll = babel.transform(targetCodeAll).ast;
+
+  console.log('\n');
+  console.log('Dynamic text, conditional attribute value, and block');
+  console.log(sourceMarkupAll);
+  console.log('HTMLBars source AST:');
+  console.log(htmlbarsAstAll);
+  walkTree(htmlbarsAstAll);
+  // console.log('Target Babel AST:');
+  // console.log(babelAstAll);
 </script>

@@ -9,7 +9,6 @@
   "author": "Ian Stewart <ianmstew@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "handlebars": "^4.0.2",
     "htmlbars": "^0.14.5"
   },
   "devDependencies": {
