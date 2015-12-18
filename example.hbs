@@ -1,1 +1,6 @@
-<h1>Hello, {{name}}</h1>
+<div class="index__billboard">
+  <h1>Welcome <span>{{name}}!</span></h1>
+  {{#each names}}
+  <div>{{this}}</div>
+  {{/each}}
+</div>
