@@ -1,0 +1,13 @@
+{
+  "preset": "airbnb",
+  "requirePaddingNewLinesAfterBlocks": {
+    "allExcept": ["inCallExpressions", "inProperties"]
+  },
+  "disallowSpacesInAnonymousFunctionExpression": {
+    "beforeOpeningRoundBrace": true
+  },
+  "requireSpacesInAnonymousFunctionExpression": {
+      "beforeOpeningCurlyBrace": true,
+      "allExcept": ["shorthand"]
+  }
+}
