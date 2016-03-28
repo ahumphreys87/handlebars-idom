@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "gulp test"
   },
-  "author": "Ian Stewart <ianmstew@gmail.com>",
+  "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
   "dependencies": {
     "htmlbars": "^0.14.5",
