@@ -103,9 +103,9 @@ describe('basic context', function() {
     shouldCompileTo('{{12.34 1}}', { '12.34': function(arg) { return 'bar' + arg; } }, 'bar1');
   });
 
-  it.skip('pass boolean literals', function() {
-    shouldCompileTo('{{true}}', {}, '');
-    shouldCompileTo('{{true}}', { '': 'foo' }, '');
-    shouldCompileTo('{{false}}', { 'false': 'foo' }, 'foo');
+  it('pass boolean literals', function() {
+    shouldCompileTo('{{true}}', {}, 'IncrementalDOM.text(data[\'true\'])');
+    shouldCompileTo('{{true}}', { '': 'foo' }, 'IncrementalDOM.text(data[\'true\'])');
+    shouldCompileTo('{{false}}', { 'false': 'foo' }, 'IncrementalDOM.text(data[\'false\'])');
   });
 });
