@@ -1,4 +1,4 @@
-describe('Regressions', function() {
+describe.skip('Regressions', function() {
   it('GH-94: Cannot read property of undefined', function() {
     var data = {
       'books': [{

@@ -1,4 +1,4 @@
-describe('builtin helpers', function() {
+describe.skip('builtin helpers', function() {
   describe('#if', function() {
     it('if', function() {
       var string = '{{#if goodbye}}GOODBYE {{/if}}cruel {{world}}!';

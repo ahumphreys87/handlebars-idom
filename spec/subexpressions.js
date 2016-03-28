@@ -1,4 +1,4 @@
-describe('subexpressions', function() {
+describe.skip('subexpressions', function() {
   it('arg-less helper', function() {
     var string = '{{foo (bar)}}!';
     var context = {};

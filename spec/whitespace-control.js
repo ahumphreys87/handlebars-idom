@@ -1,4 +1,4 @@
-describe('whitespace control', function() {
+describe.skip('whitespace control', function() {
   it('should strip whitespace around mustache calls', function() {
     var hash = {foo: 'bar<'};
 

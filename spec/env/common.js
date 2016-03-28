@@ -27,26 +27,10 @@ global.shouldCompileToWithPartials = function shouldCompileToWithPartials(string
 
 global.compileWithPartials = function(string, hashOrArray, partials) {
   var template,
-      ary,
       options;
-  if (hashOrArray && hashOrArray.hash) {
-    ary = [hashOrArray.hash, hashOrArray];
-    delete hashOrArray.hash;
-  } else if (Object.prototype.toString.call(hashOrArray) === '[object Array]') {
-    ary = [];
-    ary.push(hashOrArray[0]);
-    ary.push({ helpers: hashOrArray[1], partials: hashOrArray[2] });
-    options = typeof hashOrArray[3] === 'object' ? hashOrArray[3] : {compat: hashOrArray[3]};
-    if (hashOrArray[4] != null) {
-      options.data = !!hashOrArray[4];
-      ary[1].data = hashOrArray[4];
-    }
-  } else {
-    ary = [hashOrArray];
-  }
 
   template = CompilerContext[partials ? 'compileWithPartial' : 'compile'](string, options);
-  return template.apply(this, ary);
+  return template;
 };
 
 

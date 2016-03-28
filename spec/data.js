@@ -1,4 +1,4 @@
-describe('data', function() {
+describe.skip('data', function() {
   it('passing in data to a compiled function that expects data - works with helpers', function() {
     var template = CompilerContext.compile('{{hello}}', {data: true});
 
