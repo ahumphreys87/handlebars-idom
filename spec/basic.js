@@ -88,24 +88,24 @@ describe('basic context', function() {
   it('complex but empty paths', function() {
     shouldCompileTo('{{person/name}}', {person: {name: null}}, 'IncrementalDOM.text(data.person.name);\n');
     shouldCompileTo('{{person/name}}', {person: {}}, 'IncrementalDOM.text(data.person.name);\n');
-  });  
-
-  it.skip('pass string literals', function() {
-    shouldCompileTo('{{"foo"}}', {}, '');
-    shouldCompileTo('{{"foo"}}', { foo: 'bar' }, 'bar');
   });
 
-  it.skip('pass number literals', function() {
-    shouldCompileTo('{{12}}', {}, '');
-    shouldCompileTo('{{12}}', { '12': 'bar' }, 'bar');
-    shouldCompileTo('{{12.34}}', {}, '');
-    shouldCompileTo('{{12.34}}', { '12.34': 'bar' }, 'bar');
-    shouldCompileTo('{{12.34 1}}', { '12.34': function(arg) { return 'bar' + arg; } }, 'bar1');
+  it('pass string literals', function() {
+    shouldCompileTo('{{"foo"}}', {}, 'IncrementalDOM.text(data[\'foo\']);\n');
+    shouldCompileTo('{{"foo"}}', { foo: 'bar' }, 'IncrementalDOM.text(data[\'foo\']);\n');
+  });
+
+  it('pass number literals', function() {
+    shouldCompileTo('{{12}}', {}, 'IncrementalDOM.text(data[\'12\']);\n');
+    shouldCompileTo('{{12}}', { '12': 'bar' }, 'IncrementalDOM.text(data[\'12\']);\n');
+    shouldCompileTo('{{12.34}}', {}, 'IncrementalDOM.text(data[\'12.34\']);\n');
+    shouldCompileTo('{{12.34}}', { '12.34': 'bar' }, 'IncrementalDOM.text(data[\'12.34\']);\n');
+    // shouldCompileTo('{{12.34 1}}', { '12.34': function(arg) { return 'bar' + arg; } }, 'IncrementalDOM.text(data[\'12.34\'](1));\n');
   });
 
   it('pass boolean literals', function() {
-    shouldCompileTo('{{true}}', {}, 'IncrementalDOM.text(data[\'true\'])');
-    shouldCompileTo('{{true}}', { '': 'foo' }, 'IncrementalDOM.text(data[\'true\'])');
-    shouldCompileTo('{{false}}', { 'false': 'foo' }, 'IncrementalDOM.text(data[\'false\'])');
+    shouldCompileTo('{{true}}', {}, 'IncrementalDOM.text(data[\'true\']);\n');
+    shouldCompileTo('{{true}}', { '': 'foo' }, 'IncrementalDOM.text(data[\'true\']);\n');
+    shouldCompileTo('{{false}}', { 'false': 'foo' }, 'IncrementalDOM.text(data[\'false\']);\n');
   });
 });
