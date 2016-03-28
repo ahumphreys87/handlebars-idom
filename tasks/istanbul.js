@@ -21,8 +21,13 @@ gulp.task('istanbul', function() {
       }))
       .pipe($.istanbul.writeReports({
         dir: './coverage',
-        reporters: ['html'],
-        reportOpts: { dir: './coverage' }
+          reporters: [process.env.NODE_ENV === 'build' ? 'lcov' : 'html'],
+          reportOpts: {dir: './coverage'}
       }))
     });
+});
+
+gulp.task('coveralls', ['istanbul'], function() {
+  gulp.src('coverage/**/lcov.info')
+    .pipe($.coveralls());
 });

@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "gulp test"
+    "test": "NODE_ENV=build gulp test",
+    "coverage": "NODE_ENV=build gulp coveralls",
   },
   "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
@@ -14,6 +15,7 @@
   },
   "devDependencies": {
     "gulp": "^3.9.1",
+    "gulp-coveralls": "^0.1.4",
     "gulp-istanbul": "^0.10.3",
     "gulp-jscs": "^3.0.2",
     "gulp-jshint": "^2.0.0",
