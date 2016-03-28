@@ -1,9 +1,3 @@
-global.handlebarsEnv = null;
-
-beforeEach(function() {
-  global.handlebarsEnv = Handlebars.create();
-});
-
 describe('basic context', function() {
   it('most basic', function() {
     shouldCompileTo('{{foo}}', { foo: 'foo' }, 'foo');

@@ -3,6 +3,9 @@ var fs = require('fs');
 
 var tpl = fs.readFileSync(__dirname + '/example.hbs', 'utf8');
 
+console.log('===================== source =====================');
+console.log(tbl);
+
 var result = compiler.compile(tpl);
 
 console.log('===================== result =====================');
