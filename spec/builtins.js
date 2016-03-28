@@ -21,7 +21,7 @@ describe.skip('builtin helpers', function() {
                       'if with zero does not show the contents');
     });
 
-    it('if with function argument', function() {
+    it.skip('if with function argument', function() {
       var string = '{{#if goodbye}}GOODBYE {{/if}}cruel {{world}}!';
       shouldCompileTo(string, {goodbye: function() {return true; }, world: 'world'}, 'GOODBYE cruel world!',
                       'if with function shows the contents when function returns true');
@@ -44,7 +44,7 @@ describe.skip('builtin helpers', function() {
       var string = '{{#with person}}{{first}} {{last}}{{/with}}';
       shouldCompileTo(string, {person: {first: 'Alan', last: 'Johnson'}}, 'Alan Johnson');
     });
-    it('with with function argument', function() {
+    it.skip('with with function argument', function() {
       var string = '{{#with person}}{{first}} {{last}}{{/with}}';
       shouldCompileTo(string, {person: function() { return {first: 'Alan', last: 'Johnson'}; }}, 'Alan Johnson');
     });
@@ -256,7 +256,7 @@ describe.skip('builtin helpers', function() {
     });
   });
 
-  describe('#lookup', function() {
+  describe.skip('#lookup', function() {
     it('should lookup arbitrary content', function() {
       var string = '{{#each goodbyes}}{{lookup ../data .}}{{/each}}',
           hash = {goodbyes: [0, 1], data: ['foo', 'bar']};
