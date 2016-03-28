@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_ENV=build gulp test",
-    "coverage": "NODE_ENV=build gulp coveralls",
+    "coverage": "NODE_ENV=build gulp coveralls"
   },
   "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
