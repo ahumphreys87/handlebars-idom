@@ -25,27 +25,24 @@ describe('basic context', function() {
     shouldCompileTo('    {{~!-- long-comment --}}      blah', {}, 'IncrementalDOM.text(\'      blah\');\n');
   });
 
-  it.skip('zeros', function() {
+  it('zeros', function() {
     shouldCompileTo('num1: {{num1}}, num2: {{num2}}', {num1: 42, num2: 0},
         'IncrementalDOM.text(\'num1: \');\nIncrementalDOM.text(data.num1);\nIncrementalDOM.text(\', num2: \');\nIncrementalDOM.text(data.num2);\n');
-    shouldCompileTo('num: {{.}}', 0, 'IncrementalDOM.text(\'num: \');\nIncrementalDOM.text(data);\n');
+    // shouldCompileTo('num: {{.}}', 0, 'IncrementalDOM.text(\'num: \');\nIncrementalDOM.text(data);\n');
     shouldCompileTo('num: {{num1/num2}}', {num1: {num2: 0}}, 'IncrementalDOM.text(\'num: \');\nIncrementalDOM.text(data.num1.num2);\n');
   });
 
-  it.skip('false', function() {
-    /* eslint-disable no-new-wrappers */
+  it('false', function() {
     shouldCompileTo('val1: {{val1}}, val2: {{val2}}', {val1: false, val2: new Boolean(false)}, 'IncrementalDOM.text(\'val1: \');\nIncrementalDOM.text(data.val1);\nIncrementalDOM.text(\', val2: \');\nIncrementalDOM.text(data.val2);\n');
-    shouldCompileTo('val: {{.}}', false, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data);\n');
+    // shouldCompileTo('val: {{.}}', false, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data);\n');
     shouldCompileTo('val: {{val1/val2}}', {val1: {val2: false}}, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data.val1.val2);\n');
-
     shouldCompileTo('val1: {{{val1}}}, val2: {{{val2}}}', {val1: false, val2: new Boolean(false)}, 'IncrementalDOM.text(\'val1: \');\nIncrementalDOM.text(data.val1);\nIncrementalDOM.text(\', val2: \');\nIncrementalDOM.text(data.val2);\n');
     shouldCompileTo('val: {{{val1/val2}}}', {val1: {val2: false}}, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data.val1.val2);\n');
-    /* eslint-enable */
   });
 
   it.skip('newlines', function() {
-      shouldCompileTo("Alan's\nTest", {}, "IncrementalDOM.text('Alan\'s\\nTest');\n");
-      shouldCompileTo("Alan's\rTest", {}, "IncrementalDOM.text('Alan\'s\\rTest');\n");
+    shouldCompileTo("Alan's\nTest", {}, "IncrementalDOM.text('Alan\'s\\nTest');\n");
+    shouldCompileTo("Alan's\rTest", {}, "IncrementalDOM.text('Alan\'s\\rTest');\n");
   });
 
   it.skip('escaping text', function() {
