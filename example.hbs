@@ -1,9 +1,3 @@
-<div class="index__billboard">
-  <h1>Welcome <span>{{name}}!</span></h1>
-  {{#each names}}
-    {{@key}}
-    {{#each name}}
-      <div>{{@key}} - {{../../name}}</div>
-    {{/each}}
-  {{/each}}
-</div>
+{{#with name}}
+  <div>{{first}} {{last}}</div>
+{{/with}}
