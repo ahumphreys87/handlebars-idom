@@ -34,23 +34,20 @@ describe('basic context', function() {
 
   it('false', function() {
     shouldCompileTo('val1: {{val1}}, val2: {{val2}}', {val1: false, val2: new Boolean(false)}, 'IncrementalDOM.text(\'val1: \');\nIncrementalDOM.text(data.val1);\nIncrementalDOM.text(\', val2: \');\nIncrementalDOM.text(data.val2);\n');
-    // shouldCompileTo('val: {{.}}', false, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data);\n');
     shouldCompileTo('val: {{val1/val2}}', {val1: {val2: false}}, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data.val1.val2);\n');
     shouldCompileTo('val1: {{{val1}}}, val2: {{{val2}}}', {val1: false, val2: new Boolean(false)}, 'IncrementalDOM.text(\'val1: \');\nIncrementalDOM.text(data.val1);\nIncrementalDOM.text(\', val2: \');\nIncrementalDOM.text(data.val2);\n');
     shouldCompileTo('val: {{{val1/val2}}}', {val1: {val2: false}}, 'IncrementalDOM.text(\'val: \');\nIncrementalDOM.text(data.val1.val2);\n');
   });
 
-  it.skip('newlines', function() {
-    shouldCompileTo("Alan's\nTest", {}, "IncrementalDOM.text('Alan\'s\\nTest');\n");
-    shouldCompileTo("Alan's\rTest", {}, "IncrementalDOM.text('Alan\'s\\rTest');\n");
+  it('newlines', function() {
+    shouldCompileTo("Alan's\\nTest", {}, "IncrementalDOM.text('Alan\'s\\nTest');\n");
+    shouldCompileTo("Alan's\\rTest", {}, "IncrementalDOM.text('Alan\'s\\rTest');\n");
   });
 
-  it.skip('escaping text', function() {
-    shouldCompileTo("Awesome's", {}, "Awesome's", "text is escaped so that it doesn't get caught on single quotes");
-    shouldCompileTo('Awesome\\', {}, 'Awesome\\', "text is escaped so that the closing quote can't be ignored");
-    shouldCompileTo('Awesome\\\\ foo', {}, 'Awesome\\\\ foo', "text is escaped so that it doesn't mess up backslashes");
-    shouldCompileTo('Awesome {{foo}}', {foo: '\\'}, 'Awesome \\', "text is escaped so that it doesn't mess up backslashes");
-    shouldCompileTo(" ' ' ", {}, " ' ' ", 'double quotes never produce invalid javascript');
+  it('escaping text', function() {
+    shouldCompileTo("Awesome's", {}, "IncrementalDOM.text('Awesome\'s');\n", "text is escaped so that it doesn't get caught on single quotes");
+    shouldCompileTo('Awesome\\', {}, "IncrementalDOM.text('Awesome\\');\n", "text is escaped so that the closing quote can't be ignored");
+    shouldCompileTo('Awesome\\\\ foo', {}, "IncrementalDOM.text('Awesome\\\\ foo');\n", "text is escaped so that it doesn't mess up backslashes");
   });
 
   it.skip('paths with hyphens', function() {
@@ -69,22 +66,6 @@ describe('basic context', function() {
                     'IncrementalDOM.text(\'Goodbye \');\nIncrementalDOM.text(data.alan.expression);\nIncrementalDOM.text(\' world!\');\n', 'Nested paths access nested objects with empty string');
   });
 
-  it.skip('literal paths', function() {
-    shouldCompileTo('Goodbye {{[@alan]/expression}} world!', {'@alan': {expression: 'beautiful'}},
-        'IncrementalDOM.text(\'Goodbye \');\nIncrementalDOM.text(data[\'alan\'][\'expression\']);\nIncrementalDOM.text(\' world!\');\n', 'Literal paths can be used');
-    shouldCompileTo('Goodbye {{[foo bar]/expression}} world!', {'foo bar': {expression: 'beautiful'}},
-        'IncrementalDOM.text(\'Goodbye \');\nIncrementalDOM.text(data.alan.expression);\nIncrementalDOM.text(\' world!\');\n', 'Literal paths can be used');
-  });
-
-  it.skip('literal references', function() {
-    shouldCompileTo('Goodbye {{[foo bar]}} world!', {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
-    shouldCompileTo('Goodbye {{"foo bar"}} world!', {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
-    shouldCompileTo("Goodbye {{'foo bar'}} world!", {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
-    shouldCompileTo('Goodbye {{"foo[bar"}} world!', {'foo[bar': 'beautiful'}, 'Goodbye beautiful world!');
-    shouldCompileTo('Goodbye {{"foo\'bar"}} world!', {"foo'bar": 'beautiful'}, 'Goodbye beautiful world!');
-    shouldCompileTo("Goodbye {{'foo\"bar'}} world!", {'foo"bar': 'beautiful'}, 'Goodbye beautiful world!');
-  });
-
   it('complex but empty paths', function() {
     shouldCompileTo('{{person/name}}', {person: {name: null}}, 'IncrementalDOM.text(data.person.name);\n');
     shouldCompileTo('{{person/name}}', {person: {}}, 'IncrementalDOM.text(data.person.name);\n');
@@ -100,12 +81,27 @@ describe('basic context', function() {
     shouldCompileTo('{{12}}', { '12': 'bar' }, 'IncrementalDOM.text(data[\'12\']);\n');
     shouldCompileTo('{{12.34}}', {}, 'IncrementalDOM.text(data[\'12.34\']);\n');
     shouldCompileTo('{{12.34}}', { '12.34': 'bar' }, 'IncrementalDOM.text(data[\'12.34\']);\n');
-    // shouldCompileTo('{{12.34 1}}', { '12.34': function(arg) { return 'bar' + arg; } }, 'IncrementalDOM.text(data[\'12.34\'](1));\n');
   });
 
   it('pass boolean literals', function() {
     shouldCompileTo('{{true}}', {}, 'IncrementalDOM.text(data[\'true\']);\n');
     shouldCompileTo('{{true}}', { '': 'foo' }, 'IncrementalDOM.text(data[\'true\']);\n');
     shouldCompileTo('{{false}}', { 'false': 'foo' }, 'IncrementalDOM.text(data[\'false\']);\n');
+  });
+
+  it.skip('literal paths', function() {
+    shouldCompileTo('Goodbye {{[@alan]/expression}} world!', {'@alan': {expression: 'beautiful'}},
+        'IncrementalDOM.text(\'Goodbye \');\nIncrementalDOM.text(data[\'alan\'][\'expression\']);\nIncrementalDOM.text(\' world!\');\n', 'Literal paths can be used');
+    shouldCompileTo('Goodbye {{[foo bar]/expression}} world!', {'foo bar': {expression: 'beautiful'}},
+        'IncrementalDOM.text(\'Goodbye \');\nIncrementalDOM.text(data.alan.expression);\nIncrementalDOM.text(\' world!\');\n', 'Literal paths can be used');
+  });
+
+  it.skip('literal references', function() {
+    shouldCompileTo('Goodbye {{[foo bar]}} world!', {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
+    shouldCompileTo('Goodbye {{"foo bar"}} world!', {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
+    shouldCompileTo("Goodbye {{'foo bar'}} world!", {'foo bar': 'beautiful'}, 'Goodbye beautiful world!');
+    shouldCompileTo('Goodbye {{"foo[bar"}} world!', {'foo[bar': 'beautiful'}, 'Goodbye beautiful world!');
+    shouldCompileTo('Goodbye {{"foo\'bar"}} world!', {"foo'bar": 'beautiful'}, 'Goodbye beautiful world!');
+    shouldCompileTo("Goodbye {{'foo\"bar'}} world!", {'foo"bar': 'beautiful'}, 'Goodbye beautiful world!');
   });
 });
