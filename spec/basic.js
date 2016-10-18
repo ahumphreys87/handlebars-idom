@@ -4,7 +4,7 @@ describe('basic context', function() {
   });
 
   it('compiling with a basic context', function() {
-    shouldCompileTo('Goodbye\n{{cruel}}\n{{world}}!', {cruel: 'cruel', world: 'world'}, 'IncrementalDOM.text(\'Goodbye\n\');\nIncrementalDOM.text(data.cruel);\nIncrementalDOM.text(data.world);\nIncrementalDOM.text(\'!\');\n',
+    shouldCompileTo('Goodbye\n{{cruel}}\n{{world}}!', {cruel: 'cruel', world: 'world'}, 'IncrementalDOM.text(\'Goodbye\\n\');\nIncrementalDOM.text(data.cruel);\nIncrementalDOM.text(\'\\n\');\nIncrementalDOM.text(data.world);\nIncrementalDOM.text(\'!\');\n',
                     'It works if all the required keys are provided');
   });
 
@@ -14,7 +14,7 @@ describe('basic context', function() {
 
   it('comments', function() {
     shouldCompileTo('{{! Goodbye}}Goodbye\n{{cruel}}\n{{world}}!',
-      {cruel: 'cruel', world: 'world'}, 'IncrementalDOM.text(\'Goodbye\n\');\nIncrementalDOM.text(data.cruel);\nIncrementalDOM.text(data.world);\nIncrementalDOM.text(\'!\');\n',
+      {cruel: 'cruel', world: 'world'}, 'IncrementalDOM.text(\'Goodbye\\n\');\nIncrementalDOM.text(data.cruel);\nIncrementalDOM.text(\'\\n\');\nIncrementalDOM.text(data.world);\nIncrementalDOM.text(\'!\');\n',
       'comments are ignored');
 
     shouldCompileTo('    {{~! comment ~}}      blah', {}, 'IncrementalDOM.text(\'blah\');\n');
@@ -40,14 +40,14 @@ describe('basic context', function() {
   });
 
   it('newlines', function() {
-    shouldCompileTo("Alan's\\nTest", {}, "IncrementalDOM.text('Alan\'s\\nTest');\n");
-    shouldCompileTo("Alan's\\rTest", {}, "IncrementalDOM.text('Alan\'s\\rTest');\n");
+    shouldCompileTo("Alan's\nTest", {}, "IncrementalDOM.text('Alan\\'s\\nTest');\n");
+    shouldCompileTo("Alan's\rTest", {}, "IncrementalDOM.text('Alan\\'s\\nTest');\n");
   });
 
   it('escaping text', function() {
-    shouldCompileTo("Awesome's", {}, "IncrementalDOM.text('Awesome\'s');\n", "text is escaped so that it doesn't get caught on single quotes");
-    shouldCompileTo('Awesome\\', {}, "IncrementalDOM.text('Awesome\\');\n", "text is escaped so that the closing quote can't be ignored");
-    shouldCompileTo('Awesome\\\\ foo', {}, "IncrementalDOM.text('Awesome\\\\ foo');\n", "text is escaped so that it doesn't mess up backslashes");
+    shouldCompileTo("Awesome's", {}, "IncrementalDOM.text('Awesome\\'s');\n", "text is escaped so that it doesn't get caught on single quotes");
+    shouldCompileTo('Awesome\\', {}, "IncrementalDOM.text('Awesome\\\\');\n", "text is escaped so that the closing quote can't be ignored");
+    shouldCompileTo('Awesome\\\\ foo', {}, "IncrementalDOM.text('Awesome\\\\\\\\ foo');\n", "text is escaped so that it doesn't mess up backslashes");
   });
 
   it.skip('paths with hyphens', function() {

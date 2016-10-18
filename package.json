@@ -11,7 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "htmlbars": "^0.14.5",
-    "incremental-dom": "^0.3.0"
+    "incremental-dom": "^0.3.0",
+    "slashes": "^1.0.5"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
