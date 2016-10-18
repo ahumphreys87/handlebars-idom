@@ -1,3 +1,7 @@
-{{#with name}}
+{{#each names}}
   <div class="{{first}}">{{first}} {{last}}</div>
-{{/with}}
+
+  {{#each moreNames}}
+    <div class="{{first}}">{{first}} {{last}}</div>
+  {{/each}}
+{{/each}}
