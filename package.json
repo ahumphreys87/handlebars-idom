@@ -2,7 +2,7 @@
   "name": "handlebars-idom",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
+  "main": "lib/compiler.js",
   "scripts": {
     "test": "NODE_ENV=build gulp test",
     "coverage": "NODE_ENV=build gulp coveralls"
