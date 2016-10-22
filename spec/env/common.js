@@ -1,3 +1,5 @@
+var fs = require('fs');
+
 var AssertError;
 if (Error.captureStackTrace) {
   AssertError = function AssertError(message, caller) {
@@ -14,25 +16,14 @@ if (Error.captureStackTrace) {
   AssertError = Error;
 }
 
-global.shouldCompileTo = function(string, hashOrArray, expected, message) {
-  shouldCompileToWithPartials(string, hashOrArray, false, expected, message);
-};
-
-global.shouldCompileToWithPartials = function shouldCompileToWithPartials(string, hashOrArray, partials, expected, message) {
-  var result = compileWithPartials(string, hashOrArray, partials);
+global.shouldCompileTo = function(source, expectedFile, message) {
+  var tpl = fs.readFileSync(__dirname + '/../fixtures/' + source, 'utf8');
+  var expected = fs.readFileSync(__dirname + '/../expected/' + expectedFile, 'utf8');
+  var result = CompilerContext.compile(tpl);
   if (result !== expected) {
-    throw new AssertError("'" + result + "' should === '" + expected + "': " + message, shouldCompileToWithPartials);
+    throw new AssertError("'" + result + "' should === '" + expected + "': " + message, shouldCompileTo);
   }
 };
-
-global.compileWithPartials = function(string, hashOrArray, partials) {
-  var template,
-      options;
-
-  template = CompilerContext[partials ? 'compileWithPartial' : 'compile'](string, options);
-  return template;
-};
-
 
 global.equals = global.equal = function equals(a, b, msg) {
   if (a !== b) {
