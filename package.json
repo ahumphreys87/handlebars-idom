@@ -10,7 +10,7 @@
   "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
   "dependencies": {
-    "htmlbars": "^0.14.5",
+    "htmlbars": "^0.14.24",
     "incremental-dom": "^0.3.0",
     "lodash": "^4.16.4",
     "slashes": "^1.0.5"
