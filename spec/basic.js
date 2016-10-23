@@ -19,6 +19,10 @@ describe('basic context', function() {
     shouldCompileTo('literals.hbs', 'literals.js');
   });
 
+  it('dom elements', function() {
+    shouldCompileTo('domNodes.hbs', 'domNodes.js');
+  });
+
   // it.skip('paths with hyphens', function() {
   //   shouldCompileTo('{{foo-bar}}', {'foo-bar': 'baz'}, 'IncrementalDOM.text(data[\'foo-bar\']);\n', 'Paths can contain hyphens (-)');
   //   shouldCompileTo('{{foo.foo-bar}}', {foo: {'foo-bar': 'baz'}}, 'IncrementalDOM.text(data[\'foo\'][\'foo-bar\']);\n', 'Paths can contain hyphens (-)');

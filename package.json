@@ -10,8 +10,9 @@
   "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
   "dependencies": {
-    "htmlbars": "^0.14.5",
+    "htmlbars": "^0.14.24",
     "incremental-dom": "^0.3.0",
+    "lodash": "^4.16.4",
     "slashes": "^1.0.5"
   },
   "devDependencies": {
@@ -23,7 +24,7 @@
     "gulp-load-plugins": "^1.2.0",
     "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.1.0",
-    "incremental-dom": "^0.3.0",
+    "incremental-dom": "^0.5.0",
     "jscs-stylish": "^0.3.1",
     "jshint": "^2.9.1",
     "jshint-stylish": "^2.1.0",
