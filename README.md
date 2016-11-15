@@ -10,12 +10,23 @@ A handlebars to incrememtal-dom compiler designed to compile handlebars template
 npm install handlebars-idom --save
 ```
 
-## Usage
+## Package Usage
 
-```
+```js
 var HbsIdom = require('handlebars-idom');
 var fs = require('fs');
 var hbs = fs.readFileSync('./example.hbs', 'utf8');
 
 var idom = HbsIdom.compile(hbs);
+```
+
+## CLI
+
+
+```bash
+# piped i/o
+echo -n "{{hello}}" | hbsidom > hello.out
+
+# file paths
+hbsidom --input hello.hbs --output hello.out
 ```

@@ -7,9 +7,13 @@
     "test": "NODE_ENV=build gulp test",
     "coverage": "NODE_ENV=build gulp coveralls"
   },
+  "bin": {
+    "hbsidom": "cli.js"
+  },
   "author": "Andrew Humphreys <ahumphreys87@googlemail.com>",
   "license": "MIT",
   "dependencies": {
+    "commander": "^2.9.0",
     "htmlbars": "^0.14.24",
     "incremental-dom": "^0.3.0",
     "lodash": "^4.16.4",
