@@ -15,7 +15,7 @@
   "dependencies": {
     "commander": "^2.9.0",
     "htmlbars": "^0.14.24",
-    "incremental-dom": "^0.3.0",
+    "incremental-dom": "^0.5.1",
     "lodash": "^4.16.4",
     "slashes": "^1.0.5"
   },
